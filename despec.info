@@ -1,0 +1,4 @@
+name = Despec Module
+description = Despec hooks rewritten
+core = 7.x
+

@@ -1,0 +1,27 @@
+<?php
+function bootstrap_views_tree_inner($variables) {
+  $view = $variables['view'];
+  $options = $variables['options'];
+  $rows = $variables['rows'];
+  $title = $variables['title'];
+  $result = $variables['result'];
+  $parent = $variables['parent'];
+
+  // Assuming that the first parent is always 0 (root level), we can initialize
+  // the depth variable.
+  $variables['depth'] = $parent == 0 ? 0 : $variables['depth'] + 1;
+  // Set the depth limit to whatever suits you. You can set different depth
+  // limits by switching on the view name and display.
+  $depth_limit = 1;
+  $items = array();
+  if ($depth_limit >= $variables['depth']) {
+    foreach ($result as $i => $record) {
+      if ($record->views_tree_parent == $parent) {
+        $variables['parent'] = $record->views_tree_main;
+        $items[] = $rows[$i] . call_user_func(__FUNCTION__, $variables);
+      }
+    }
+  }
+  return count($items) ? theme('item_list', array('items' => $items, 'type' => $options['type'])) : '';
+}
+
